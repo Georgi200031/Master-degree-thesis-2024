@@ -1,0 +1,5 @@
+numpy==1.24.4
+opencv-python==4.9.0.80
+pylint==3.0.3
+yfinance==0.2.38
+matplotlib==3.8.4
