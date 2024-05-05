@@ -12,10 +12,10 @@ class TrainingData:
     def __init__(self):
         self.filtered_data = None
         self.data_frame = None
-        self.X_train = None
+        self.x_train = None
         self.y_train = None
-        self.X_test = None
         self.x_test = None
+        self.y_test = None
         self.split_index = None
 
         self.symbol = 'GC=F'
@@ -37,15 +37,18 @@ class TrainingData:
 
         # Save DataFrame to a CSV file
         self.data_frame.to_csv('in/chart_btc.csv')
-    
+
     def scale_date( self ):
+        """
+        Function to scale data in range (0,1)
+        """
         data = self.data_frame['Close'].values.reshape(-1, 1) - np.min(self.data_frame)
         normalized_data = (data / (np.max(data) - np.min(data)))  # Normalize dat
-        X = normalized_data[:-1]
+        x = normalized_data[:-1]
         y = normalized_data[1:]
         # Split the data into training and testing sets (80-20 split)
         #X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4)
 
-        self.split_index = int(0.8 * len(X))
-        self.X_train, self.y_train = X[:self.split_index], y[:self.split_index]
-        self.X_test, self.y_test = X[self.split_index:], y[self.split_index:]
+        self.split_index = int(0.8 * len(x))
+        self.x_train, self.y_train = x[:self.split_index], y[:self.split_index]
+        self.x_test, self.y_test = x[self.split_index:], y[self.split_index:]

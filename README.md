@@ -1,10 +1,10 @@
-# Finger print recognize
+# Gold price prediction project
 
-Brief description of your project.
+Brief description of project.
 
 ## Prerequisites
 
-- Docker installed on your machine.
+- Docker installed on machine.
 
 ## Installing Docker on Ubuntu
 
@@ -26,20 +26,19 @@ Follow the steps below to install Docker on Ubuntu:
 
 ## Docker commands
 Follow the step to work with Docker   
-
    1. Run Docker Service
         sudo service docker start
    2. Build docker file
-	sudo docker build -t dockerfile .
+        sudo docker build -t dockerfile .
    3. Run docker file
         sudo docker run -d -p 8080:80 thesis
    4. Run directly
-	sudo docker run -it <container name>
-   5. For open docker image after run use
-	sudo docker logs <container id>
-   6. For view all runing dockers 
-	use this command sudo docker ps -a
-   7. For remove docker 
-	use this command sudo docker rm <container id>
-   8. For stop docker container
-	use this command sudo docker stop <container id>
+        sudo docker run -it <container name>
+   5. For opening docker image after run use
+        sudo docker logs <container id>
+   6. For viewing all running dockers 
+        use this command sudo docker ps -a
+   7. For removing docker 
+        use this command sudo docker rm <container id>
+   8. For stopping docker container
+        use this command sudo docker stop <container id>

@@ -1,3 +1,6 @@
+"""
+    This is main class of Project Gold price predicition
+"""
 import tkinter as tk
 from lib.GUI.GoldPricePrediction import GoldPricePredictionGUI
 

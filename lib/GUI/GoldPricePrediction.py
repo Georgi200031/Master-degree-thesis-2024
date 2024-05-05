@@ -1,6 +1,9 @@
+"""
+This is Ui class for project
+"""
 from lib.traning_data import TrainingData
 import numpy as np
-from lib.models.Backpropagation import BackpropagationModel
+from lib.models.BackpropagationModel import BackpropagationModel
 from lib.ploter.plot import Ploter
 from lib.models import settings
 import tkinter as tk
@@ -8,15 +11,24 @@ from tkinter import ttk
 from tkinter import messagebox
 
 class GoldPricePredictionGUI:
+    """
+    This is class for UI on project
+    """
     def __init__(self, root):
+        """
+        This is default constructor
+        """
         self.root = root
         self.data = None
         self.algorithm_settings = settings.Settings()
         self.root.title("GOLD PRICE PREDICTION GUI")
-        
+
         self.create_buttons()
 
     def create_buttons(self):
+        """
+        This function creates buttons of the application
+        """
         self.gold_button = tk.Button(
             self.root, text="Gold", command=self.on_gold_button_click,
             font=("Helvetica", 16), padx=20, pady=10
@@ -37,13 +49,22 @@ class GoldPricePredictionGUI:
             font=("Helvetica", 16), padx=20, pady=10
         )
 
+
     def on_gold_button_click(self):
+        """
+        This fuction is event when click on 
+        gold button
+        """
         self.gold_button.pack_forget()
         self.grid_search_button.pack(pady=10)
         self.train_button.pack(pady=10)
         self.test_button.pack(pady=10)
 
     def on_grid_search_click(self):
+        """
+        This button is event when click 
+        on grid search
+        """
         progress_window = tk.Toplevel(self.root)
         progress_window.title("Grid Search Progress")
 
@@ -52,7 +73,8 @@ class GoldPricePredictionGUI:
 
         style = ttk.Style()
         style.configure("TProgressbar", thickness=30)
-        progress = ttk.Progressbar(progress_window, length=300, mode='determinate', style="TProgressbar")
+        progress = ttk.Progressbar(progress_window, length=300,
+                                        mode='determinate', style="TProgressbar")
         progress.pack(pady=10)
 
         progress_window.update()
@@ -61,36 +83,41 @@ class GoldPricePredictionGUI:
         train_data.generate()
         train_data.scale_date()
 
-        full_interval = [0.0001, 0.0002, 0.0003, 0.0004, 0.0005, 0.0006, 0.0007, 0.0008]
+        #full_interval = [0.0001, 0.0002, 0.0003, 0.0004, 0.0005, 0.0006, 0.0007, 0.0008]
 
-        self.algorithm_settings.set_grid_search_parameters( 800, [20], [0.008], [0.000006], [0.006] )
+        self.algorithm_settings.set_grid_search_parameters( 800, [20], [0.008], \
+                                                            [0.000006], [0.006] )
 
-        def update_progress(epoch, total_epochs):
-            progress['value'] = epoch 
+        def update_progress( epoch ):
+            progress['value'] = epoch
             progress_window.update_idletasks()
 
         progress['maximum'] = self.algorithm_settings.epochs
         results = []
-
         for hidden_size in self.algorithm_settings.hidden_layers:
             backpropagation = BackpropagationModel(1, hidden_size, 1)
             best_hyperparameters = backpropagation.grid_search(
-                train_data.X_train, train_data.y_train, hidden_size, backpropagation,self.algorithm_settings, update_progress
+                train_data.x_train, train_data.y_train, hidden_size, backpropagation,
+                self.algorithm_settings, update_progress
             )
             results.append(best_hyperparameters)
 
         best_error = float('inf')
         for best_hyperparameters in results:
             for best_hyperparameter in best_hyperparameters:
-                if(best_hyperparameter['error'] < best_error):
+                if best_hyperparameter['error'] < best_error:
                     best_error = best_hyperparameter['error']
                     self.algorithm_settings.set_properties(best_hyperparameter['epoch'],
-                        hidden_size, best_hyperparameter['learning_rate'],
-                        best_hyperparameter['regularization_strength'], best_hyperparameter['momentum']
+                        20, best_hyperparameter['learning_rate'],
+                        best_hyperparameter['regularization_strength'],
+                        best_hyperparameter['momentum']
                     )
         progress_window.destroy()
 
     def on_train_button_click(self):
+        """
+        This fuction is event when clicked by train button
+        """
         train_data = TrainingData()
         train_data.generate()
         train_data.scale_date()
@@ -105,6 +132,10 @@ class GoldPricePredictionGUI:
         self.create_training_progress_ui(training_window, backpropagation, train_data)
 
     def create_training_progress_ui(self, window, backpropagation, train_data):
+        """
+        This event is training proccess after clicked 
+        train button
+        """
         label = tk.Label(window, text="Training in progress...", font=("Helvetica", 14))
         label.pack(pady=10)
 
@@ -117,11 +148,12 @@ class GoldPricePredictionGUI:
             progress['value'] = (epoch / epochs) * 100
             window.update_idletasks()
 
-        backpropagation.train(train_data.X_train, train_data.y_train, self.algorithm_settings, update_progress, 'train')
+        backpropagation.train(train_data.x_train, train_data.y_train, \
+                              self.algorithm_settings, update_progress, 'train')
 
         messagebox.showinfo("Training Complete", "Training has been completed successfully!")
 
-        predictions = backpropagation.forward(train_data.X_train) 
+        predictions = backpropagation.forward(train_data.x_train)
         min_price = np.min(train_data.data_frame['Close'].values.reshape(-1, 1))
         max_price = np.max(train_data.data_frame['Close'].values.reshape(-1, 1))
         denormalized_predictions = predictions * (max_price - min_price) + min_price
@@ -129,7 +161,8 @@ class GoldPricePredictionGUI:
         y_train = train_data.y_train * (max_price - min_price) + min_price
 
         plot_test_data = Ploter()
-        plot_test_data.plot_data(train_data, y_train, denormalized_predictions, train_data.split_index, 'train')
+        plot_test_data.plot_data(train_data, y_train, denormalized_predictions, \
+                                  train_data.split_index, 'train')
 
         final_weights = backpropagation.get_weights()
         np.savez('out/neural_network_weights.npz', *final_weights)
@@ -137,6 +170,10 @@ class GoldPricePredictionGUI:
         window.destroy()
 
     def on_test_button_click(self):
+        """
+        This funct is event when was clicked
+        test button.
+        """
         train_data = TrainingData()
         train_data.generate()
         train_data.scale_date()
@@ -158,9 +195,13 @@ class GoldPricePredictionGUI:
         neural_network.weights_hidden_output = loaded_weights_hidden_output
         neural_network.bias_output = loaded_bias_output
 
-        predictions = neural_network.forward(train_data.X_test)
-        denormalized_predictions = predictions * (np.max(self.data) - np.min(self.data)) + np.min(self.data)
-        y_test = train_data.y_test * (np.max(self.data) - np.min(self.data)) + np.min(self.data)
+        predictions = neural_network.forward(train_data.x_test)
+        denormalized_predictions = predictions * (np.max(self.data) - np.min(self.data)) \
+                                    + np.min(self.data)
+
+        y_test = train_data.y_test * (np.max(self.data) - np.min(self.data)) \
+                     + np.min(self.data)
 
         plot_test_data = Ploter()
-        plot_test_data.plot_data(train_data, y_test, denormalized_predictions, train_data.split_index, 'test')
+        plot_test_data.plot_data(train_data, y_test, denormalized_predictions, \
+                                 train_data.split_index, 'test')
