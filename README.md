@@ -1,4 +1,4 @@
-# Finger print recognize
+# Gold price prediction
 
 Brief description of your project.
 
