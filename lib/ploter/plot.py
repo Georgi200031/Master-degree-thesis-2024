@@ -19,10 +19,13 @@ class Ploter:
         """
         generated_data = data_generator
         if mode == 'test':
-            plt.plot(generated_data.data_frame.index[split_index:-1], \
+            #print(generated_data.data_frame.index[split_index:-1])
+            plt.plot(generated_data.data_frame.index[split_index:], \
                         y_test, label='True Data', color='blue')
-            plt.plot(generated_data.data_frame.index[split_index:-1], \
+            #print(len(y_test))
+            plt.plot(generated_data.data_frame.index[split_index:], \
                         denormalized_predictions, label='Predictions', color='red')
+            print(len (denormalized_predictions))
         if mode == 'train':
             plt.plot(generated_data.data_frame.index[:split_index], \
                         y_test, label='True Data', color='blue')

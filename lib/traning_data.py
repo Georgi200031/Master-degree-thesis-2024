@@ -20,9 +20,9 @@ class TrainingData:
 
         self.symbol = 'GC=F'
 
-        self.since_date = dt.datetime(2002, 1, 1)
+        self.since_date = dt.datetime(2003, 1, 1)
         self.until_date = dt.datetime(2024, 2, 25)
-
+    
     def generate(self):
         """
         Function to generate data set
@@ -30,6 +30,7 @@ class TrainingData:
 
         # Fetch historical data using yfinance
         self.data_frame = yf.download(self.symbol, start=self.since_date, end=self.until_date)
+        #self.data_frame = self.data_frame.resample('h').ffill().bfill()
 
     def print_data_frame(self):
         """ Function to print data set and save to a file """
@@ -42,13 +43,22 @@ class TrainingData:
         """
         Function to scale data in range (0,1)
         """
-        data = self.data_frame['Close'].values.reshape(-1, 1) - np.min(self.data_frame)
-        normalized_data = (data / (np.max(data) - np.min(data)))  # Normalize dat
-        x = normalized_data[:-1]
-        y = normalized_data[1:]
-        # Split the data into training and testing sets (80-20 split)
-        #X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4)
+        print(self.data_frame)
+        min_date = self.data_frame['Open'].values.reshape(-1, 1).min()
+        max_date = self.data_frame['Open'].values.reshape(-1, 1).max()
+        min_date_index = self.data_frame.index.values.reshape(-1, 1).min()
+        max_date_index = self.data_frame.index.values.reshape(-1, 1).max()
+        data = self.data_frame['Open'].values.reshape(-1, 1)
+        window_index = 10
+        normalized_dates = (data - min_date) / (max_date - min_date)
 
-        self.split_index = int(0.8 * len(x))
-        self.x_train, self.y_train = x[:self.split_index], y[:self.split_index]
-        self.x_test, self.y_test = x[self.split_index:], y[self.split_index:]
+
+        min_date = self.data_frame['High'].values.reshape(-1, 1).min()
+        max_date = self.data_frame['High'].values.reshape(-1, 1).max()
+
+        normalized_price = ( self.data_frame['High'].values.reshape(-1, 1) - min_date) / (max_date - min_date)
+
+        self.split_index_dates = int(0.6 * len(normalized_dates))
+        self.split_index = int(0.6 * len(normalized_dates))
+        self.x_train, self.y_train = normalized_dates[:self.split_index], normalized_price[:self.split_index_dates]
+        self.x_test, self.y_test = normalized_dates[self.split_index:], normalized_price[self.split_index_dates:]

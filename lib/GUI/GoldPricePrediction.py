@@ -153,7 +153,7 @@ class GoldPricePredictionGUI:
 
         messagebox.showinfo("Training Complete", "Training has been completed successfully!")
 
-        predictions = backpropagation.forward(train_data.x_train)
+        predictions = backpropagation.forward(train_data.x_train, train_data.y_train)
         min_price = np.min(train_data.data_frame['Close'].values.reshape(-1, 1))
         max_price = np.max(train_data.data_frame['Close'].values.reshape(-1, 1))
         denormalized_predictions = predictions * (max_price - min_price) + min_price
@@ -177,7 +177,7 @@ class GoldPricePredictionGUI:
         train_data = TrainingData()
         train_data.generate()
         train_data.scale_date()
-
+        #print(train_data.x_test)
         loaded_weights = np.load('out/neural_network_weights.npz')
         loaded_weights_input_hidden = loaded_weights['arr_0']
         loaded_bias_hidden = loaded_weights['arr_1']
@@ -194,10 +194,10 @@ class GoldPricePredictionGUI:
         neural_network.bias_hidden = loaded_bias_hidden
         neural_network.weights_hidden_output = loaded_weights_hidden_output
         neural_network.bias_output = loaded_bias_output
-
-        predictions = neural_network.forward(train_data.x_test)
+        
+        predictions = neural_network.forward(train_data.x_test, train_data.y_test)
         denormalized_predictions = predictions * (np.max(self.data) - np.min(self.data)) \
-                                    + np.min(self.data)
+                                   + np.min(self.data)
 
         y_test = train_data.y_test * (np.max(self.data) - np.min(self.data)) \
                      + np.min(self.data)

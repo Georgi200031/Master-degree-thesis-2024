@@ -7,11 +7,11 @@ class Settings:
         """
         This is constructure when class was created
         """
-        self._epochs = 100
-        self._hidden_layer = 100
-        self._learning_rate = 0.6
-        self._regularization_strength = 0.01
-        self._momentum = 0.001
+        self._epochs = 800
+        self._hidden_layer = 20
+        self._learning_rate = 0.001
+        self._regularization_strength = 0.000002
+        self._momentum = 0.0009
 
         self._learning_rates = []
         self._regularization_strengths = []

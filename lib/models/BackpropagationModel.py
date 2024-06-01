@@ -68,12 +68,15 @@ class BackpropagationModel:
         """Calculate the derivative of the sigmoid activation function."""
         return x * (1 - x)
 
-    def forward(self, x):
+    def forward(self, x, y):
         """Perform a forward pass through the network."""
         self.hidden_activation = self.sigmoid(np.dot(x, self.weights_input_hidden) \
                                              + self.bias_hidden)
         self.output = self.sigmoid(np.dot(self.hidden_activation, self.weights_hidden_output) \
                                   + self.bias_output)
+        error = (y - self.output)
+        loss = np.mean(error**2)
+        print(loss)
         return self.output
 
     def backward(self, x, y, learning_rate, regularization_strength):
@@ -117,7 +120,7 @@ class BackpropagationModel:
             # Forward and backward pass for each epoch
             if mode != 'grid_search':
                 update_progress(epoch, algo_settings.epochs)
-            output = self.forward(x)
+            output = self.forward(x,y)
             self.momentum = algo_settings.momentum
             self.backward(x, y, algo_settings.learning_rate, algo_settings.regularization_strength)
 
@@ -132,7 +135,7 @@ class BackpropagationModel:
                 loss += regularization_term
                 if loss < best_loss:
                     best_loss = loss
-                    best_predictions = self.forward(x).copy()
+                    best_predictions = self.forward(x,y).copy()
                     self.best_hyperparameters = {
                         'epoch': epoch,
                         'learning_rate': algo_settings.learning_rate,
