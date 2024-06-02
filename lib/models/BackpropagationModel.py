@@ -76,7 +76,7 @@ class BackpropagationModel:
                                   + self.bias_output)
         error = (y - self.output)
         loss = np.mean(error**2)
-        print(loss)
+        #print(loss)
         return self.output
 
     def backward(self, x, y, learning_rate, regularization_strength):
@@ -111,7 +111,7 @@ class BackpropagationModel:
 
         return error
 
-    def train(self, x, y, algo_settings, update_progress, mode):
+    def train(self, x, y, algo_settings, update_progress, mode, log):
         """Train the neural network."""
         loss = None
         best_predictions = None
@@ -143,7 +143,8 @@ class BackpropagationModel:
                         'momentum': algo_settings.momentum,
                         'error': best_loss
                     }
-                print(f"Iteration {epoch}, Error: {loss}")
+                #print(f"Iteration {epoch}, Error: {loss}")
+                log(f"Iteration {epoch}, Error: {loss}")
         return best_predictions, self.best_hyperparameters, best_loss
 
     def get_weights(self):
@@ -152,7 +153,7 @@ class BackpropagationModel:
             self.weights_hidden_output, self.bias_output
 
     @staticmethod
-    def grid_search(x_train, y_train, hidden_size, model, algo_settings, update_progress):
+    def grid_search(x_train, y_train, hidden_size, model, algo_settings, update_progress, log):
         """Perform grid search."""
         best_hyperparameters = []
         mse_values = []
@@ -160,8 +161,9 @@ class BackpropagationModel:
         current_iteration = 0
         total_iterations = len(algo_settings.momentums) * len(algo_settings.learning_rates) * \
                             len(algo_settings.regularization_strengths)
-        print(total_iterations)
+        #print(total_iterations)
         step = algo_settings.epochs / total_iterations
+        print(algo_settings.momentums, algo_settings.learning_rates, algo_settings.regularization_strengths)
         for momentum in algo_settings.momentums:
             for lr in algo_settings.learning_rates:
                 for reg_strength in algo_settings.regularization_strengths:
@@ -172,11 +174,11 @@ class BackpropagationModel:
                     example_settings.set_properties(algo_settings.epochs, hidden_size, \
                                                     lr, reg_strength, momentum)
                     best_model, best_hyperparameter, loss = model.train(x_train, y_train, \
-                                                            example_settings, update_progress, 'grid_search')
+                                                            example_settings, update_progress, 'grid_search', log)
 
                     best_hyperparameters.append(best_hyperparameter)
                     mse_values.append(loss)
                     model.reset()
 
-        plot_data.plot_x_y(algo_settings.learning_rates, mse_values, 'learning_rates', 'MSE')
+        #plot_data.plot_x_y(algo_settings.learning_rates, mse_values, 'learning_rates', 'MSE')
         return best_hyperparameters
