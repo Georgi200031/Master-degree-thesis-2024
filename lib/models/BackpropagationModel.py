@@ -74,8 +74,8 @@ class BackpropagationModel:
                                              + self.bias_hidden)
         self.output = self.sigmoid(np.dot(self.hidden_activation, self.weights_hidden_output) \
                                   + self.bias_output)
-        error = (y - self.output)
-        loss = np.mean(error**2)
+        #error = (y - self.output)
+        #loss = np.mean(error**2)
         #print(loss)
         return self.output
 
@@ -138,6 +138,7 @@ class BackpropagationModel:
                     best_predictions = self.forward(x,y).copy()
                     self.best_hyperparameters = {
                         'epoch': epoch,
+                        'hidden_layer': self.hidden_size,
                         'learning_rate': algo_settings.learning_rate,
                         'regularization_strength': algo_settings.regularization_strength,
                         'momentum': algo_settings.momentum,

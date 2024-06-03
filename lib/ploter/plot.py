@@ -13,18 +13,22 @@ class Ploter:
         matplotlib.use('TkAgg')
 
     def plot_data( self, data_generator, y_test, \
-                  denormalized_predictions, split_index, mode ):
+                  denormalized_predictions, split_index, mode, checked ):
         """
         This fucnction plot data and predicted on base this data
         """
         generated_data = data_generator
         if mode == 'test':
             #print(generated_data.data_frame.index[split_index:-1])
-            plt.plot(generated_data.data_frame.index[split_index:], \
-                        y_test, label='True Data', color='blue')
-            #print(len(y_test))
-            plt.plot(generated_data.data_frame.index[split_index:], \
-                        denormalized_predictions, label='Predictions', color='red')
+            if checked != 1:
+                plt.plot(generated_data.data_frame.index[split_index:], \
+                            y_test, label='True Data', color='blue')
+                #print(len(y_test))
+                plt.plot(generated_data.data_frame.index[split_index:], \
+                            denormalized_predictions, label='Predictions', color='red')
+            else :
+                plt.plot(data_generator, \
+                            denormalized_predictions, label='Predictions', color='red')
             print(len (denormalized_predictions))
         if mode == 'train':
             plt.plot(generated_data.data_frame.index[:split_index], \

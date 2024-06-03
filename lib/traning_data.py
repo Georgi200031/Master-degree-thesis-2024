@@ -6,7 +6,7 @@ class TrainingData:
     """
     Class to generate data using yfinance
     """
-    def __init__(self, stock, start_date, end_date, split_percentage):
+    def __init__(self, stock, start_date, end_date, split_percentage, algorithm_settings):
         self.symbol_mapping = {
             "Bitcoin": 'BTC-USD',
             "Ethereum": 'ETH-USD',
@@ -24,6 +24,8 @@ class TrainingData:
         self.y_test = None
         self.split_percentage = split_percentage / 100
         self.split_index = None
+        self.training_by = algorithm_settings.training_by
+        self.predicted_by = algorithm_settings.predicted_by
 
         self.symbol = self.symbol_mapping[stock]
 
@@ -49,19 +51,30 @@ class TrainingData:
         """
         Function to scale data in range (0,1)
         """
+        data = None
         #print(self.data_frame)
-        min_date = self.data_frame['Open'].values.reshape(-1, 1).min()
-        max_date = self.data_frame['Open'].values.reshape(-1, 1).max()
-        min_date_index = self.data_frame.index.values.reshape(-1, 1).min()
-        max_date_index = self.data_frame.index.values.reshape(-1, 1).max()
-        data = self.data_frame['Open'].values.reshape(-1, 1)
+        print(type(self.training_by))
+        if str(self.training_by) != "date":
+            min_date = self.data_frame[self.training_by].values.reshape(-1, 1).min()
+            max_date = self.data_frame[self.training_by].values.reshape(-1, 1).max()
+            data = self.data_frame[self.training_by].values.reshape(-1, 1)
+        else:
+            min_date = self.data_frame.index.values.reshape(-1, 1).min()
+            max_date = self.data_frame.index.values.reshape(-1, 1).max()
+            data = self.data_frame.index.values.reshape(-1, 1)
         window_index = 10
         normalized_dates = (data - min_date) / (max_date - min_date)
+        print(self.predicted_by)
+        if self.predicted_by != "date":
+            min_date = self.data_frame[str(self.predicted_by)].values.reshape(-1, 1).min()
+            max_date = self.data_frame[str(self.predicted_by)].values.reshape(-1, 1).max()
+            data = self.data_frame[str(self.predicted_by)].values.reshape(-1, 1)
+        else:
+            min_date = self.data_frame.index.values.reshape(-1, 1).min()
+            max_date = self.data_frame.index.values.reshape(-1, 1).max()
+            data = self.data_frame.index.values.reshape(-1, 1)
 
-        min_date = self.data_frame['High'].values.reshape(-1, 1).min()
-        max_date = self.data_frame['High'].values.reshape(-1, 1).max()
-
-        normalized_price = (self.data_frame['High'].values.reshape(-1, 1) - min_date) / (max_date - min_date)
+        normalized_price = (data - min_date) / (max_date - min_date)
 
         #self.split_index_dates = int(0.6 * len(normalized_dates))
         self.split_index = int(self.split_percentage * len(normalized_dates))
