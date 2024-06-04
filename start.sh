@@ -1,1 +1,1 @@
-sudo docker run -it thesis
+sudo docker run stockpredictprice

@@ -134,57 +134,70 @@ class CryptoGraphicGui:
         for i in range(4):
             self.grid_search_frame.grid_columnconfigure(i, weight=1)
 
-        # Learning Rates
+        self.hidden_layers_from_label = tk.Label(self.grid_search_frame, text="Settings for grid search:", bg="#f0f0f0")
+        self.hidden_layers_from_label.grid(row=0, column=0, padx=5, pady=5, sticky='w')
+
+        self.hidden_layers_from_label = tk.Label(self.grid_search_frame, text="From:", bg="#f0f0f0")
+        self.hidden_layers_from_label.grid(row=0, column=1, padx=10, pady=10, sticky='w')
+
+        self.hidden_layers_to_label = tk.Label(self.grid_search_frame, text="To:", bg="#f0f0f0")
+        self.hidden_layers_to_label.grid(row=0, column=2, padx=5, pady=5, sticky='w')
+
+        self.hidden_layers_step_label = tk.Label(self.grid_search_frame, text="Step:", bg="#f0f0f0")
+        self.hidden_layers_step_label.grid(row=0, column=3, padx=5, pady=5, sticky='w')
+        
         self.learning_rate_label = tk.Label(self.grid_search_frame, text="Learning Rates:", bg="#f0f0f0")
-        self.learning_rate_label.grid(row=0, column=0, padx=5, pady=5, sticky='w')
+        self.learning_rate_label.grid(row=1, column=0, padx=5, pady=5, sticky='w')
         self.learning_rate_from_entry = tk.Entry(self.grid_search_frame, width=10)
-        self.learning_rate_from_entry.grid(row=0, column=1, padx=5, pady=5, sticky='ew')
+        self.learning_rate_from_entry.grid(row=1, column=1, padx=5, pady=5, sticky='ew')
         self.learning_rate_from_entry.insert(0,"0.01")
         self.learning_rate_to_entry = tk.Entry(self.grid_search_frame, width=10)
-        self.learning_rate_to_entry.grid(row=0, column=2, padx=5, pady=5, sticky='ew')
+        self.learning_rate_to_entry.grid(row=1, column=2, padx=5, pady=5, sticky='ew')
         self.learning_rate_to_entry.insert(0,"0.1")
         self.learning_rate_step_entry = tk.Entry(self.grid_search_frame, width=10)
-        self.learning_rate_step_entry.grid(row=0, column=3, padx=5, pady=5, sticky='ew')
+        self.learning_rate_step_entry.grid(row=1, column=3, padx=5, pady=5, sticky='ew')
         self.learning_rate_step_entry.insert(0, "10")
 
         # Regularization Strengths
         self.regularization_label = tk.Label(self.grid_search_frame, text="Regularization Strengths:", bg="#f0f0f0")
-        self.regularization_label.grid(row=1, column=0, padx=5, pady=5, sticky='w')
+        self.regularization_label.grid(row=2, column=0, padx=5, pady=5, sticky='w')
         self.regularization_from_entry = tk.Entry(self.grid_search_frame, width=10)
-        self.regularization_from_entry.grid(row=1, column=1, padx=5, pady=5, sticky='ew')
+        self.regularization_from_entry.grid(row=2, column=1, padx=5, pady=5, sticky='ew')
         self.regularization_from_entry.insert(0,"0.001")
         self.regularization_to_entry = tk.Entry(self.grid_search_frame, width=10)
-        self.regularization_to_entry.grid(row=1, column=2, padx=5, pady=5, sticky='ew')
+        self.regularization_to_entry.grid(row=2, column=2, padx=5, pady=5, sticky='ew')
         self.regularization_to_entry.insert(0,"0.01")
         self.regularization_step_entry = tk.Entry(self.grid_search_frame, width=10)
-        self.regularization_step_entry.grid(row=1, column=3, padx=5, pady=5, sticky='ew')
+        self.regularization_step_entry.grid(row=2, column=3, padx=5, pady=5, sticky='ew')
         self.regularization_step_entry.insert(0, "10")
 
         # Momentums
         self.momentum_label = tk.Label(self.grid_search_frame, text="Momentums:", bg="#f0f0f0")
-        self.momentum_label.grid(row=2, column=0, padx=5, pady=5, sticky='w')
+        self.momentum_label.grid(row=3, column=0, padx=5, pady=5, sticky='w')
         self.momentum_from_entry = tk.Entry(self.grid_search_frame, width=10)
-        self.momentum_from_entry.grid(row=2, column=1, padx=5, pady=5, sticky='ew')
+        self.momentum_from_entry.grid(row=3, column=1, padx=5, pady=5, sticky='ew')
         self.momentum_from_entry.insert(0,"0.5")
         self.momentum_to_entry = tk.Entry(self.grid_search_frame, width=10)
-        self.momentum_to_entry.grid(row=2, column=2, padx=5, pady=5, sticky='ew')
+        self.momentum_to_entry.grid(row=3, column=2, padx=5, pady=5, sticky='ew')
         self.momentum_to_entry.insert(0,"0.9")
         self.momentum_step_entry = tk.Entry(self.grid_search_frame, width=10)
-        self.momentum_step_entry.grid(row=2, column=3, padx=5, pady=5, sticky='ew')
+        self.momentum_step_entry.grid(row=3, column=3, padx=5, pady=5, sticky='ew')
         self.momentum_step_entry.insert(0, "10")
 
         # Hidden Layers
         self.hidden_layers_label = tk.Label(self.grid_search_frame, text="Hidden Layers:", bg="#f0f0f0")
-        self.hidden_layers_label.grid(row=3, column=0, padx=5, pady=5, sticky='w')
+        self.hidden_layers_label.grid(row=4, column=0, padx=5, pady=5, sticky='w')
         self.hidden_layers_from_entry = tk.Entry(self.grid_search_frame, width=10)
-        self.hidden_layers_from_entry.grid(row=3, column=1, padx=5, pady=5, sticky='ew')
+        self.hidden_layers_from_entry.grid(row=4, column=1, padx=5, pady=5, sticky='ew')
         self.hidden_layers_from_entry.insert(0,"10")
         self.hidden_layers_to_entry = tk.Entry(self.grid_search_frame, width=10)
-        self.hidden_layers_to_entry.grid(row=3, column=2, padx=5, pady=5, sticky='ew')
+        self.hidden_layers_to_entry.grid(row=4, column=2, padx=5, pady=5, sticky='ew')
         self.hidden_layers_to_entry.insert(0,"10")
         self.hidden_layers_step_entry = tk.Entry(self.grid_search_frame, width=10)
-        self.hidden_layers_step_entry.grid(row=3, column=3, padx=5, pady=5, sticky='ew')
+        self.hidden_layers_step_entry.grid(row=4, column=3, padx=5, pady=5, sticky='ew')
         self.hidden_layers_step_entry.insert(0, "1")
+
+        
 
     def get_grid_search_parameters(self):
         learning_rates = np.linspace(float(self.learning_rate_from_entry.get()), float(self.learning_rate_to_entry.get()),int(self.learning_rate_step_entry.get())).tolist()
@@ -355,7 +368,8 @@ class CryptoGraphicGui:
         # Convert the lists of normalized and non-normalized dates to NumPy arrays
         normalized_dates_array = np.array(normalized_dates)
         all_dates_array = np.array(all_dates)
-    
+
+        
         # Return a tuple containing both arrays
         return normalized_dates_array, all_dates_array
 
@@ -378,7 +392,6 @@ class CryptoGraphicGui:
         neural_network.bias_hidden = loaded_bias_hidden
         neural_network.weights_hidden_output = loaded_weights_hidden_output
         neural_network.bias_output = loaded_bias_output
-        x_test = train_data.x_test
         self.data = train_data.data_frame[self.algorithm_settings.predicted_by].values.reshape(-1, 1)
         if self.algorithm_settings.predict_future == 1:
             start_date = self.start_date_calendar.get_date()

@@ -1,10 +1,9 @@
 # Use an official Python runtime as a parent image
-FROM python:3.8
+FROM python:3.10.12
 
 # Install necessary libraries for OpenCV and OpenGL
 RUN apt-get update && \
-    apt-get install -y libgl1-mesa-glx && \
-    apt-get install python3-tk && \
+    apt-get install -y libgl1-mesa-glx python3-tk xvfb && \
     rm -rf /var/lib/apt/lists/*
 
 # Set the working directory to /app
@@ -20,8 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 80
 
 # Define environment variable
-ENV NAME fingerPrintRecognize
+ENV NAME stockpredictprice
 
-# Run app.py when the container launches
-CMD ["python", "./main.py"]
-
+# Start Xvfb and then run main.py when the container launches
+CMD ["bash", "-c", "Xvfb :99 -screen 0 1024x768x16 & export DISPLAY=:99 && python ./main.py"]
