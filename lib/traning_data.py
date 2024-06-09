@@ -6,7 +6,7 @@ class TrainingData:
     """
     Class to generate data using yfinance
     """
-    def __init__(self, stock, start_date, end_date, split_percentage, algorithm_settings):
+    def __init__(self, stock, start_date, end_date, split_percentage, algorithm_settings, log):
         self.symbol_mapping = {
             "Bitcoin": 'BTC-USD',
             "Ethereum": 'ETH-USD',
@@ -26,7 +26,7 @@ class TrainingData:
         self.split_index = None
         self.training_by = algorithm_settings.training_by
         self.predicted_by = algorithm_settings.predicted_by
-
+        self.log = log
         self.symbol = self.symbol_mapping[stock]
 
         self.since_date = start_date
@@ -36,9 +36,9 @@ class TrainingData:
         """
         Function to generate data set
         """
-        # Fetch historical data using yfinance
+       
         self.data_frame = yf.download(self.symbol, start=self.since_date, end=self.until_date)
-        #self.data_frame = self.data_frame.resample('h').ffill().bfill()
+
 
     def save_data_frame(self):
         """ Function to print data set and save to a file """
