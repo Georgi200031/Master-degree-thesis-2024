@@ -1,4 +1,4 @@
-# Stock price prediction project
+# Gold price prediction project
 
 Brief description of project.
 
